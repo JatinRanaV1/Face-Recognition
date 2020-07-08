@@ -9,7 +9,7 @@ FRAME_THICKNESS = 3
 FONT_THICKNESS = 2
 MODEL = 'hog'  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
 
-video=cv2.VideoCapture(2)
+video=cv2.VideoCapture(0)
 
 print('Loading known faces...')
 known_faces = []
@@ -79,10 +79,20 @@ while True:
             # Paint frame
             cv2.rectangle(image, top_left, bottom_right, color, cv2.FILLED)
 
-            # Wite a name
+            # Write a name
             cv2.putText(image, match, (face_location[3] + 10, face_location[2] + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), FONT_THICKNESS)
+
+        if False in results:
+            # Each location contains positions in order: top, right, bottom, left
+            top_left = (face_location[3], face_location[0])
+            bottom_right = (face_location[1], face_location[2])
+
+            color = [0,0,255]
+
+            # Paint frame
+            cv2.rectangle(image, top_left, bottom_right, color, FRAME_THICKNESS)
 
     # Show image
     cv2.imshow(filename, image)
-    if cv2.waitkey(1) & 0xFF==ord("q"): #here if user presses "q" then program is terminated
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
