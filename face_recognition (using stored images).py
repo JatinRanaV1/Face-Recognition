@@ -10,7 +10,7 @@ UNKNOWN_FACES_DIR="unknown_faces"
 TOLERANCE=0.6
 FRAME_THICKNESS=3
 FONT_THICKNESS=3
-MODEL="cnn"  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
+MODEL="hog"  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
 
 print('Loading known faces...')
 known_faces=[]
@@ -78,8 +78,19 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
             # Paint frame
             cv2.rectangle(image, top_left, bottom_right, color, cv2.FILLED)
 
-            # Wite a name
+            # Write a name
             cv2.putText(image, match, (face_location[3] + 10, face_location[2] + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), FONT_THICKNESS)
+
+        if False in results:
+            # Each location contains positions in order: top, right, bottom, left
+            top_left = (face_location[3], face_location[0])
+            bottom_right = (face_location[1], face_location[2])
+
+            color = [0,0,255]
+
+            # Paint frame
+            cv2.rectangle(image, top_left, bottom_right, color, FRAME_THICKNESS)
+
 
     # Show image
     cv2.imshow(filename, image)
